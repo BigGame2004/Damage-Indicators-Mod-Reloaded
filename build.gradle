@@ -1,0 +1,55 @@
+buildscript {
+    repositories {
+        maven {
+            name = "forge"
+            url = "https://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.9'
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "${minecraft_version}-${forge_version}"
+group = "damageindicatorsmod"
+archivesBaseName = "DamageindIcatorsMod"
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "${minecraft_version}-${forge_version}"
+    runDir = "run"
+
+    mappings = "snapshot_20171116"
+
+    replaceIn "Info.java"
+    replace "@VERSION@", project.version
+}
+
+repositories {
+    maven {
+        url "http://maven.blamejared.com"
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}

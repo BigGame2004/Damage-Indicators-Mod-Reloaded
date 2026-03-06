@@ -1,0 +1,15 @@
+< en_US.lang - English localization file for the mod Atlantis Spongebob Mod >
+entity.EntityCrabs.name=Mr. Crabs
+entity.EntitySpongebob.name=Spongebob
+entity.EntityPlankton.name=Plankton
+entity.EntityPatrick.name=Pattrick
+entity.EntitySandy.name=Sandy
+entity.EntityGary.name=Gary
+entity.EntitySquidward.name=Squidward
+entity.atlantisspongebob.EntityCrabs.name=Mr. Crabs
+entity.atlantisspongebob.EntitySpongebob.name=Spongebob
+entity.atlantisspongebob.EntityPlankton.name=Plankton
+entity.atlantisspongebob.EntityPatrick.name=Pattrick
+entity.atlantisspongebob.EntitySandy.name=Sandy
+entity.atlantisspongebob.EntityGary.name=Gary
+entity.atlantisspongebob.EntitySquidward.name=Squidward
