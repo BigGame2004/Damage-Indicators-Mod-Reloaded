@@ -73,7 +73,7 @@ public class DIClientProxy extends DIProxy {
             (new Thread(new Runnable() {
                 public void run() {
                     try {
-                        InputStreamReader fr = new InputStreamReader((new URL("http://voidswrath.com/release/DamageIndicatorMod.txt")).openStream(), "UTF-8");
+                        InputStreamReader fr = new InputStreamReader((new URL("https://github.com/BigGame2004/Damage-Indicators-Mod-Patched/blob/main/changelog.txt")).openStream(), "UTF-8");
                         BufferedReader br = new BufferedReader(fr);
                         String version = "";
                         version = br.readLine().trim();
@@ -90,7 +90,7 @@ public class DIClientProxy extends DIProxy {
                         } catch (Throwable ex) {
                             ex.printStackTrace();
                         }
-
+                        // Something in the logic that tries to tell the player the mod failed to check for updates can crash the game.
                         br.close();
                         fr.close();
                     } catch (Throwable ex) {
