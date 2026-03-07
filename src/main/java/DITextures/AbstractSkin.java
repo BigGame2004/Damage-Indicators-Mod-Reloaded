@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class AbstractSkin {
     public static final List<String> AVAILABLESKINS = new ArrayList();
     private static String lastSkinUsed;
-    public static final Minecraft MCINSTANCE = Minecraft.func_71410_x();
+    public static final Minecraft MCINSTANCE = Minecraft.getMinecraft();
     public static final Map<String, AbstractSkin> SKINS = new HashMap();
     private final EnumMap<EnumSkinPart, Object> skinMap = new EnumMap(EnumSkinPart.class);
 
@@ -74,7 +74,7 @@ public abstract class AbstractSkin {
 
     public static void init() {
         JarSkinRegistration.scanJarForSkins(DIMod.class);
-        File file = new File(Minecraft.func_71410_x().field_71412_D, "CustomDISkins");
+        File file = new File(Minecraft.getMinecraft().gameDir, "CustomDISkins");
         file.mkdirs();
         FileSkinRegistration.scanFilesForSkins(file);
 
@@ -118,7 +118,7 @@ public abstract class AbstractSkin {
             for(EnumSkinPart esp : EnumSet.allOf(EnumSkinPart.class)) {
                 if (esp.name().endsWith("ID")) {
                     if ((DynamicTexture)lastSkin.skinMap.get(esp) != null) {
-                        GL11.glDeleteTextures(((DynamicTexture)lastSkin.skinMap.get(esp)).func_110552_b());
+                        GL11.glDeleteTextures(((DynamicTexture)lastSkin.skinMap.get(esp)).getGlTextureId());
                     }
 
                     lastSkin.skinMap.put(esp, (Object)null);
@@ -173,7 +173,7 @@ public abstract class AbstractSkin {
     }
 
     public final void bindTexture(EnumSkinPart enumSkinPart) {
-        ((DynamicTexture)this.skinMap.get(enumSkinPart)).func_110564_a();
+        ((DynamicTexture)this.skinMap.get(enumSkinPart)).updateDynamicTexture();
     }
 
     public final String getInternalName() {
@@ -251,7 +251,7 @@ public abstract class AbstractSkin {
             check = new DynamicTexture(bufImg);
             this.skinMap.put(uniqueName, check);
         } else {
-            bufImg.getRGB(0, 0, bufImg.getWidth(), bufImg.getHeight(), check.func_110565_c(), 0, bufImg.getWidth());
+            bufImg.getRGB(0, 0, bufImg.getWidth(), bufImg.getHeight(), check.getTextureData(), 0, bufImg.getWidth());
         }
 
         return check;

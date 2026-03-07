@@ -13,16 +13,16 @@ public class GuiCheckBox extends GuiButton {
 
     public GuiCheckBox(int id, int x, int y, int w, int h, String Message) {
         super(id, x, y, w, h, Message);
-        this.field_146124_l = true;
-        this.field_146126_j = Message;
+        this.enabled = true;
+        this.displayString = Message;
     }
 
     public int getWidth() {
-        return this.field_146120_f;
+        return this.width;
     }
 
-    public void func_191745_a(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        int offset = mc.field_71466_p.func_78256_a(this.field_146126_j) + 5;
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        int offset = mc.fontRenderer.getStringWidth(this.displayString) + 5;
         if (DIGuiTools.widgetsPNG == null) {
             try {
                 BufferedImage ex = ImageIO.read(Minecraft.class.getResourceAsStream("/assets/minecraft/textures/gui/widgets.png"));
@@ -32,19 +32,19 @@ public class GuiCheckBox extends GuiButton {
             }
         }
 
-        if (this.field_146124_l) {
-            mc.field_71466_p.func_175063_a(this.field_146126_j, (float)this.field_146128_h, (float)this.field_146129_i, Color.white.getRGB());
+        if (this.enabled) {
+            mc.fontRenderer.drawStringWithShadow(this.displayString, (float)this.x, (float)this.y, Color.white.getRGB());
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         } else {
-            mc.field_71466_p.func_175063_a(this.field_146126_j, (float)this.field_146128_h, (float)this.field_146129_i, Color.GRAY.getRGB());
+            mc.fontRenderer.drawStringWithShadow(this.displayString, (float)this.x, (float)this.y, Color.GRAY.getRGB());
             GL11.glColor4f(0.5F, 0.5F, 0.5F, 1.0F);
         }
 
-        DIGuiTools.widgetsPNG.func_110564_a();
+        DIGuiTools.widgetsPNG.updateDynamicTexture();
         if (!this.checked) {
-            this.drawTexturedModalRect128(this.field_146128_h + offset, this.field_146129_i, 240, 0, 8, 8);
+            this.drawTexturedModalRect128(this.x + offset, this.y, 240, 0, 8, 8);
         } else {
-            this.drawTexturedModalRect128(this.field_146128_h + offset, this.field_146129_i, 232, 0, 8, 8);
+            this.drawTexturedModalRect128(this.x + offset, this.y, 232, 0, 8, 8);
         }
 
     }
@@ -62,10 +62,10 @@ public class GuiCheckBox extends GuiButton {
         float var7 = 0.007813F;
         float var8 = 0.007813F;
         GL11.glBegin(7);
-        addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.field_73735_i, (double)((float)(par3 + 0) * var7), (double)((float)(par4 + par6) * var8));
-        addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.field_73735_i, (double)((float)(par3 + par5) * var7), (double)((float)(par4 + par6) * var8));
-        addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.field_73735_i, (double)((float)(par3 + par5) * var7), (double)((float)(par4 + 0) * var8));
-        addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.field_73735_i, (double)((float)(par3 + 0) * var7), (double)((float)(par4 + 0) * var8));
+        addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * var7), (double)((float)(par4 + par6) * var8));
+        addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * var7), (double)((float)(par4 + par6) * var8));
+        addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * var7), (double)((float)(par4 + 0) * var8));
+        addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * var7), (double)((float)(par4 + 0) * var8));
         GL11.glEnd();
     }
 
@@ -73,8 +73,8 @@ public class GuiCheckBox extends GuiButton {
         return this.checked;
     }
 
-    public void func_146118_a(int par1, int par2) {
-        super.func_146118_a(par1, par2);
+    public void mouseReleased(int par1, int par2) {
+        super.mouseReleased(par1, par2);
     }
 
     public void setChecked(boolean checked) {

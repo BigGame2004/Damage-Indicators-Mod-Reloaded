@@ -39,13 +39,13 @@ import org.lwjgl.opengl.GL11;
 
 public class DIGuiTools extends GuiIngame {
     public static Field foundField = null;
-    public static DIGuiTools instance = new DIGuiTools(Minecraft.func_71410_x());
+    public static DIGuiTools instance = new DIGuiTools(Minecraft.getMinecraft());
     public static Map<Class, Integer> mobRenderLists = new HashMap();
     public static Long offset;
     public static int opt = 0;
     public static double rotationCounter = (double)0.0F;
     public static boolean skinned = true;
-    private static final Minecraft mc = Minecraft.func_71410_x();
+    private static final Minecraft mc = Minecraft.getMinecraft();
     private static ScaledResolution scaledresolution;
     public static DynamicTexture inventoryPNG;
     public static DynamicTexture widgetsPNG;
@@ -99,7 +99,7 @@ public class DIGuiTools extends GuiIngame {
         GL11.glDisable(3553);
         GL11.glDisable(3008);
         GL11.glShadeModel(7425);
-        Tessellator var15 = Tessellator.func_178181_a();
+        Tessellator var15 = Tessellator.getInstance();
         GL11.glBegin(7);
         GL11.glColor4d((double)var8, (double)var9, (double)var10, (double)var7);
         addVertex((double)par3, (double)par2, (double)zLevel);
@@ -107,7 +107,7 @@ public class DIGuiTools extends GuiIngame {
         GL11.glColor4d((double)var12, (double)var13, (double)var14, (double)var11);
         addVertex((double)par1, (double)par4, (double)zLevel);
         addVertex((double)par3, (double)par4, (double)zLevel);
-        var15.func_78381_a();
+        var15.draw();
         GL11.glShadeModel(7424);
         GL11.glEnable(3008);
         GL11.glEnable(3553);
@@ -167,20 +167,20 @@ public class DIGuiTools extends GuiIngame {
             } catch (Exception var14) {
             }
 
-            if (mc.field_71466_p.field_78288_b + 2 > healthBarHeight) {
+            if (mc.fontRenderer.FONT_HEIGHT + 2 > healthBarHeight) {
                 GL11.glPushMatrix();
 
                 try {
-                    GL11.glTranslatef((float)(locX + healthBarX) + ((float)healthBarWidth - (float)mc.field_71466_p.func_78256_a(Health) * 0.7F) / 2.0F, (float)(locY + healthBarY + healthBarHeight) - (float)mc.field_71466_p.field_78288_b * 0.7F - 0.5F, 0.0F);
+                    GL11.glTranslatef((float)(locX + healthBarX) + ((float)healthBarWidth - (float)mc.fontRenderer.getStringWidth(Health) * 0.7F) / 2.0F, (float)(locY + healthBarY + healthBarHeight) - (float)mc.fontRenderer.FONT_HEIGHT * 0.7F - 0.5F, 0.0F);
                     GL11.glScalef(0.7F, 0.7F, 1.0F);
-                    mc.field_71466_p.func_175063_a(Health, 0.0F, 0.0F, packedRGB);
+                    mc.fontRenderer.drawStringWithShadow(Health, 0.0F, 0.0F, packedRGB);
                 } catch (Throwable var13) {
                 }
 
                 GL11.glPopMatrix();
             } else {
                 try {
-                    mc.field_71466_p.func_175063_a(Health, (float)(locX + healthBarX + (healthBarWidth - mc.field_71466_p.func_78256_a(Health)) / 2), (float)(locY + healthBarY + (healthBarHeight - mc.field_71466_p.field_78288_b) / 2), packedRGB);
+                    mc.fontRenderer.drawStringWithShadow(Health, (float)(locX + healthBarX + (healthBarWidth - mc.fontRenderer.getStringWidth(Health)) / 2), (float)(locY + healthBarY + (healthBarHeight - mc.fontRenderer.FONT_HEIGHT) / 2), packedRGB);
                 } catch (Throwable var12) {
                 }
             }
@@ -202,16 +202,16 @@ public class DIGuiTools extends GuiIngame {
         GL11.glEnable(3089);
 
         try {
-            int ex = MathHelper.func_76141_d((float)((locX + MobPreviewOffsetX) * scaledresolution.func_78325_e()));
-            int boxWidth = MathHelper.func_76141_d((float)(backgroundWidth * scaledresolution.func_78325_e()));
-            int boxHeight = MathHelper.func_76141_d((float)(backgroundHeight * scaledresolution.func_78325_e()));
-            int boxLocY = MathHelper.func_76141_d((float)((locY + MobPreviewOffsetY) * scaledresolution.func_78325_e()));
-            if (!(mc.field_71462_r instanceof AdvancedGui)) {
+            int ex = MathHelper.floor((float)((locX + MobPreviewOffsetX) * scaledresolution.getScaleFactor()));
+            int boxWidth = MathHelper.floor((float)(backgroundWidth * scaledresolution.getScaleFactor()));
+            int boxHeight = MathHelper.floor((float)(backgroundHeight * scaledresolution.getScaleFactor()));
+            int boxLocY = MathHelper.floor((float)((locY + MobPreviewOffsetY) * scaledresolution.getScaleFactor()));
+            if (!(mc.currentScreen instanceof AdvancedGui)) {
                 boxWidth = (int)((float)boxWidth * DIConfig.mainInstance().guiScale);
                 boxHeight = (int)((float)boxHeight * DIConfig.mainInstance().guiScale);
             }
 
-            GL11.glScissor(ex, Minecraft.func_71410_x().field_71440_d - boxLocY - boxHeight, boxWidth, boxHeight);
+            GL11.glScissor(ex, Minecraft.getMinecraft().displayHeight - boxLocY - boxHeight, boxWidth, boxHeight);
             drawTargettedMobPreview(el, locX + MobPreviewOffsetX, locY + MobPreviewOffsetY);
         } catch (Throwable var15) {
             var15.printStackTrace();
@@ -222,7 +222,7 @@ public class DIGuiTools extends GuiIngame {
     }
 
     public static void drawMobTypes(EntityLivingBase el, AbstractSkin skin, int locX, int locY) {
-        if (!DIEventBus.enemies.contains(el.func_145782_y()) && !(el instanceof IMob)) {
+        if (!DIEventBus.enemies.contains(el.getEntityId()) && !(el instanceof IMob)) {
             GL11.glColor4f(0.0F, 1.0F, 0.0F, 0.6F);
             GL11.glColor4d((double)0.0F, (double)1.0F, (double)0.0F, (double)0.6F);
         } else {
@@ -232,12 +232,12 @@ public class DIGuiTools extends GuiIngame {
 
         float step1 = 0.2F;
         float glTexX;
-        if (!el.func_184222_aU()) {
+        if (!el.isNonBoss()) {
             glTexX = 4.0F * step1;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.6F);
             GL11.glColor4d((double)1.0F, (double)1.0F, (double)1.0F, (double)0.6F);
-        } else if (el.func_70668_bt() != EnumCreatureAttribute.UNDEAD && !el.func_70662_br()) {
-            if (el.func_70668_bt() == EnumCreatureAttribute.ARTHROPOD) {
+        } else if (el.getCreatureAttribute() != EnumCreatureAttribute.UNDEAD && !el.isEntityUndead()) {
+            if (el.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD) {
                 glTexX = 3.0F * step1;
             } else if (!(el instanceof EntityPlayer) && !(el instanceof EntityWitch) && !(el instanceof EntityVillager) && !(el instanceof EntityIronGolem)) {
                 glTexX = 1.0F * step1;
@@ -286,7 +286,7 @@ public class DIGuiTools extends GuiIngame {
             var10.printStackTrace();
         }
 
-        mc.field_71466_p.func_175063_a(Name, (float)(locX + NamePlateX + (NamePlateWidth - mc.field_71466_p.func_78256_a(Name)) / 2), (float)(locY + NamePlateY + (NamePlateHeight - mc.field_71466_p.field_78288_b) / 2), packedRGB);
+        mc.fontRenderer.drawStringWithShadow(Name, (float)(locX + NamePlateX + (NamePlateWidth - mc.fontRenderer.getStringWidth(Name)) / 2), (float)(locY + NamePlateY + (NamePlateHeight - mc.fontRenderer.FONT_HEIGHT) / 2), packedRGB);
         GL11.glColor4d((double)1.0F, (double)1.0F, (double)1.0F, (double)1.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
@@ -312,7 +312,7 @@ public class DIGuiTools extends GuiIngame {
                         GL11.glDepthFunc(515);
                     }
 
-                    OpenGlHelper.func_77475_a(OpenGlHelper.field_77476_b, 240.0F, 0.003662109F);
+                    OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
                     GL11.glEnable(3553);
                     GL11.glDisable(3042);
                     GL11.glDepthMask(true);
@@ -331,7 +331,7 @@ public class DIGuiTools extends GuiIngame {
                             }
                             break;
                         case MOBPREVIEW:
-                            if (drawMobAndBackground && el.func_110143_aJ() > 0.0F) {
+                            if (drawMobAndBackground && el.getHealth() > 0.0F) {
                                 drawMobPreview(el, ex, locX, locY);
                             }
                             break;
@@ -339,7 +339,7 @@ public class DIGuiTools extends GuiIngame {
                             drawNamePlate(ex, locX, locY);
                             break;
                         case HEALTHBAR:
-                            drawHealthBar(ex, locX, locY, health, maxHealth, el != null ? el.func_145782_y() : -1);
+                            drawHealthBar(ex, locX, locY, health, maxHealth, el != null ? el.getEntityId() : -1);
                             break;
                         case FRAME:
                             drawFrame(ex, locX, locY);
@@ -403,14 +403,14 @@ public class DIGuiTools extends GuiIngame {
         try {
             boolean ex = false;
             DIConfig diConfig = DIConfig.mainInstance();
-            if (diConfig.enablePotionEffects && DIEventBus.potionEffects.get(el.func_145782_y()) != null && !((Collection)DIEventBus.potionEffects.get(el.func_145782_y())).isEmpty()) {
+            if (diConfig.enablePotionEffects && DIEventBus.potionEffects.get(el.getEntityId()) != null && !((Collection)DIEventBus.potionEffects.get(el.getEntityId())).isEmpty()) {
                 int position = 0;
-                if (DIEventBus.potionEffects.containsKey(el.func_145782_y())) {
-                    for(PotionEffect adjy : (Collection)DIEventBus.potionEffects.get(el.func_145782_y())) {
-                        int Duration = adjy.func_76459_b();
+                if (DIEventBus.potionEffects.containsKey(el.getEntityId())) {
+                    for(PotionEffect adjy : (Collection)DIEventBus.potionEffects.get(el.getEntityId())) {
+                        int Duration = adjy.getDuration();
                         if (Duration > 0) {
-                            Potion potion = adjy.func_188419_a();
-                            if (potion != null && potion.func_76400_d() && Duration > 10) {
+                            Potion potion = adjy.getPotion();
+                            if (potion != null && potion.hasStatusIcon() && Duration > 10) {
                                 GL11.glPushMatrix();
                                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                                 GL11.glColor4d((double)1.0F, (double)1.0F, (double)1.0F, (double)1.0F);
@@ -436,20 +436,20 @@ public class DIGuiTools extends GuiIngame {
                                 addVertexWithUV((double)(adjx1 + 20), (double)(adjy1 + PotionBoxHeight), (double)0.0F, (double)1.0F, (double)1.0F);
                                 addVertexWithUV((double)(adjx1 + 20), (double)adjy1, (double)0.0F, (double)1.0F, (double)0.0F);
                                 GL11.glEnd();
-                                int iconIndex = potion.func_76392_e();
-                                String formattedtime = Potion.func_188410_a(adjy, 1.0F);
+                                int iconIndex = potion.getStatusIconIndex();
+                                String formattedtime = Potion.getPotionDurationString(adjy, 1.0F);
                                 int posx = diConfig.locX + PotionBoxOffsetX + position * 20 + PotionBoxSidesWidth + 2;
                                 int posy = diConfig.locY + PotionBoxOffsetY + 2;
                                 int ioffx = (0 + iconIndex % 8) * 18;
                                 int ioffy = (0 + iconIndex / 8) * 18 + 198;
                                 int width = PotionBoxHeight - 4;
-                                inventoryPNG.func_110564_a();
-                                instance.func_73729_b(posx, posy, ioffx, ioffy, width, width);
+                                inventoryPNG.updateDynamicTexture();
+                                instance.drawTexturedModalRect(posx, posy, ioffx, ioffy, width, width);
 
                                 try {
-                                    GL11.glTranslatef((float)(diConfig.locX + PotionBoxOffsetX + position * 20 + PotionBoxSidesWidth + 13 - mc.field_71466_p.func_78256_a(formattedtime) / 2), (float)(diConfig.locY + PotionBoxOffsetY + PotionBoxHeight) - (float)mc.field_71466_p.field_78288_b * 0.815F, 0.1F);
+                                    GL11.glTranslatef((float)(diConfig.locX + PotionBoxOffsetX + position * 20 + PotionBoxSidesWidth + 13 - mc.fontRenderer.getStringWidth(formattedtime) / 2), (float)(diConfig.locY + PotionBoxOffsetY + PotionBoxHeight) - (float)mc.fontRenderer.FONT_HEIGHT * 0.815F, 0.1F);
                                     GL11.glScalef(0.815F, 0.815F, 0.815F);
-                                    mc.field_71466_p.func_175063_a(formattedtime, 0.0F, 0.0F, (new Color(1.0F, 1.0F, 0.5F, 1.0F)).getRGB());
+                                    mc.fontRenderer.drawStringWithShadow(formattedtime, 0.0F, 0.0F, (new Color(1.0F, 1.0F, 0.5F, 1.0F)).getRGB());
                                     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                                     GL11.glColor4d((double)1.0F, (double)1.0F, (double)1.0F, (double)1.0F);
                                 } catch (Throwable var23) {
@@ -494,26 +494,26 @@ public class DIGuiTools extends GuiIngame {
         GL11.glPushMatrix();
 
         try {
-            if (el == Minecraft.func_71410_x().field_71439_g) {
+            if (el == Minecraft.getMinecraft().player) {
                 GL11.glTranslatef((float)(locX + 25) + configentry.XOffset, (float)(locY + 52) + configentry.YOffset - 30.0F, 1.0F);
             } else {
                 GL11.glTranslatef((float)(locX + 25) + configentry.XOffset, (float)(locY + 52) + configentry.YOffset, 1.0F);
             }
 
             GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-            float ex = (3.0F - el.func_70047_e()) * configentry.EntitySizeScaling;
+            float ex = (3.0F - el.getEyeHeight()) * configentry.EntitySizeScaling;
             float finalScale = configentry.ScaleFactor + configentry.ScaleFactor * ex;
-            if (el.func_70631_g_()) {
+            if (el.isChild()) {
                 finalScale = (configentry.ScaleFactor + configentry.ScaleFactor * ex) * configentry.BabyScaleFactor;
             }
 
             GL11.glScalef(finalScale * 0.85F, finalScale * 0.85F, 0.1F);
             if (config.lockPosition) {
-                int hurt = el.field_70737_aN;
-                float ex1 = el.field_70760_ar;
-                el.field_70737_aN = 0;
-                el.field_70760_ar = el.field_70761_aq - 360.0F;
-                GL11.glRotatef(el.field_70761_aq - 360.0F, 0.0F, 1.0F, 0.0F);
+                int hurt = el.hurtTime;
+                float ex1 = el.prevRenderYawOffset;
+                el.hurtTime = 0;
+                el.prevRenderYawOffset = el.renderYawOffset - 360.0F;
+                GL11.glRotatef(el.renderYawOffset - 360.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-30.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GL11.glPushMatrix();
@@ -525,12 +525,12 @@ public class DIGuiTools extends GuiIngame {
                 }
 
                 GL11.glPopMatrix();
-                el.field_70760_ar = ex1;
-                el.field_70737_aN = hurt;
+                el.prevRenderYawOffset = ex1;
+                el.hurtTime = hurt;
             } else {
-                int hurt = el.field_70737_aN;
-                el.field_70737_aN = 0;
-                GL11.glRotatef(180.0F - Minecraft.func_71410_x().field_71439_g.field_70177_z, 0.0F, -1.0F, 0.0F);
+                int hurt = el.hurtTime;
+                el.hurtTime = 0;
+                GL11.glRotatef(180.0F - Minecraft.getMinecraft().player.rotationYaw, 0.0F, -1.0F, 0.0F);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GL11.glPushMatrix();
 
@@ -540,7 +540,7 @@ public class DIGuiTools extends GuiIngame {
                 }
 
                 GL11.glPopMatrix();
-                el.field_70737_aN = hurt;
+                el.hurtTime = hurt;
             }
         } catch (Throwable var13) {
         }
@@ -555,9 +555,9 @@ public class DIGuiTools extends GuiIngame {
         try {
             float backup = RenderLiving.NAME_TAG_RANGE;
             RenderLiving.NAME_TAG_RANGE = 0.0F;
-            Render render = Minecraft.func_71410_x().func_175598_ae().func_78713_a(el);
+            Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(el);
             if (render != null) {
-                render.func_76986_a(el, (double)0.0F, (double)0.0F, (double)0.0F, 0.0F, 1.0F);
+                render.doRender(el, (double)0.0F, (double)0.0F, (double)0.0F, 0.0F, 1.0F);
             }
 
             RenderLiving.NAME_TAG_RANGE = backup;
@@ -569,9 +569,9 @@ public class DIGuiTools extends GuiIngame {
         GL11.glDisable(2929);
         GL11.glColor4f(255.0F, 255.0F, 255.0F, 255.0F);
         GL11.glBlendFunc(770, 771);
-        GlStateManager.func_179138_g(OpenGlHelper.field_77476_b);
-        GlStateManager.func_179090_x();
-        GlStateManager.func_179138_g(OpenGlHelper.field_77478_a);
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GlStateManager.disableTexture2D();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
     public DIGuiTools(Minecraft par1Minecraft) {

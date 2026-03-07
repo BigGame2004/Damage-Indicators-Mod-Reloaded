@@ -84,9 +84,9 @@ public class DIMod {
     @EventHandler
     public void serverStarted(FMLServerStartedEvent evt) {
         try {
-            ServerCommandManager scm = (ServerCommandManager)FMLCommonHandler.instance().getMinecraftServerInstance().func_71187_D();
-            if (!scm.func_71555_a().containsKey(this.cdi.func_71517_b())) {
-                scm.func_71560_a(this.cdi);
+            ServerCommandManager scm = (ServerCommandManager)FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager();
+            if (!scm.getCommands().containsKey(this.cdi.getName())) {
+                scm.registerCommand(this.cdi);
             }
         } catch (Throwable var3) {
         }

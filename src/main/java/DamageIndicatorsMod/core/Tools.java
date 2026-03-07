@@ -23,7 +23,7 @@ import net.minecraftforge.common.config.Configuration;
 public class Tools {
     private static HashMap<Class, EntityConfigurationEntry> entityMap = new HashMap();
     public static int timeTillFlush = 500;
-    private Minecraft mc = Minecraft.func_71410_x();
+    private Minecraft mc = Minecraft.getMinecraft();
     public List<Object[]> unloadedEntities = new ArrayList();
     private static Tools instance;
     boolean lasttimefailed = false;
@@ -40,7 +40,7 @@ public class Tools {
     }
 
     public BufferedImage doFilter(BufferedImage src) throws OutOfMemoryError, Throwable {
-        int upScaleDim = MathHelper.func_76141_d((float)src.getWidth() * DIConfig.mainInstance().ScaleFilter);
+        int upScaleDim = MathHelper.floor((float)src.getWidth() * DIConfig.mainInstance().ScaleFilter);
         BufferedImage dst = new BufferedImage(upScaleDim, upScaleDim, src.getType());
         AffineTransformOp ato = new AffineTransformOp(AffineTransform.getScaleInstance((double)DIConfig.mainInstance().ScaleFilter, (double)DIConfig.mainInstance().ScaleFilter), DIConfig.mainInstance().hints);
         ato.filter(src, dst);
@@ -60,8 +60,8 @@ public class Tools {
             DIMod.s_sUpdateMessage = "Damage Indicators was unable to check for updates.";
         }
 
-        if (!"".equals(DIMod.s_sUpdateMessage) && this.mc.field_71439_g != null) {
-            this.mc.field_71439_g.func_145747_a(new TextComponentString(DIMod.s_sUpdateMessage));
+        if (!"".equals(DIMod.s_sUpdateMessage) && this.mc.player != null) {
+            this.mc.player.sendMessage(new TextComponentString(DIMod.s_sUpdateMessage));
             DIMod.s_sUpdateMessage = "";
         }
 
@@ -78,8 +78,8 @@ public class Tools {
     public static Map<Class<? extends Entity>, String> getEntityList() {
         Map<Class<? extends Entity>, String> ret = new HashMap();
 
-        for(ResourceLocation rl : EntityList.func_180124_b()) {
-            ret.put(EntityList.getClass(rl), EntityList.func_191302_a(rl));
+        for(ResourceLocation rl : EntityList.getEntityNameList()) {
+            ret.put(EntityList.getClass(rl), EntityList.getTranslationName(rl));
         }
 
         ret.put(EntityOtherPlayerMP.class, "OtherPlayers");

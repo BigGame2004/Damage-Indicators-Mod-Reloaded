@@ -55,21 +55,21 @@ public class DIPermissions implements IMessage {
             String darkRed = "§4";
             String darkGreen = "§2";
             if (!mouseOversDisabled && !allDisabled) {
-                player.func_145747_a(new TextComponentString("[DamageIndicators] " + darkGreen + "Mouseovers enabled."));
+                player.sendMessage(new TextComponentString("[DamageIndicators] " + darkGreen + "Mouseovers enabled."));
             } else {
-                player.func_145747_a(new TextComponentString("[DamageIndicators] " + darkRed + "Server has disabled mouseovers."));
+                player.sendMessage(new TextComponentString("[DamageIndicators] " + darkRed + "Server has disabled mouseovers."));
             }
 
             if (!potionEffectsDisabled && !allDisabled) {
-                player.func_145747_a(new TextComponentString("[DamageIndicators] " + darkGreen + "Potion Effects enabled."));
+                player.sendMessage(new TextComponentString("[DamageIndicators] " + darkGreen + "Potion Effects enabled."));
             } else {
-                player.func_145747_a(new TextComponentString("[DamageIndicators] " + darkRed + "Server has disabled potion effects."));
+                player.sendMessage(new TextComponentString("[DamageIndicators] " + darkRed + "Server has disabled potion effects."));
             }
 
             if (!popOffsDisabled && !allDisabled) {
-                player.func_145747_a(new TextComponentString("[DamageIndicators] " + darkGreen + "Popoffs enabled."));
+                player.sendMessage(new TextComponentString("[DamageIndicators] " + darkGreen + "Popoffs enabled."));
             } else {
-                player.func_145747_a(new TextComponentString("[DamageIndicators] " + darkRed + "Server has disabled damage popoffs."));
+                player.sendMessage(new TextComponentString("[DamageIndicators] " + darkRed + "Server has disabled damage popoffs."));
             }
 
         }

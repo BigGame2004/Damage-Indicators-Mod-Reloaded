@@ -40,7 +40,7 @@ public class GuiEntityList extends GuiScrollingList {
     }
 
     protected void drawBackground() {
-        this.parent.func_146278_c(2);
+        this.parent.drawBackground(2);
     }
 
     protected void drawSlot(int listIndex, int var2, int var3, int var4, Tessellator var5) {
@@ -68,14 +68,14 @@ public class GuiEntityList extends GuiScrollingList {
                 this.visibleEntities.remove(listIndex);
             }
 
-            this.parent.getFontRenderer().func_78276_b(this.parent.getFontRenderer().func_78269_a(entryName, this.listWidth - 10), this.left + 3, var3 + 2, 16777215);
+            this.parent.getFontRenderer().drawString(this.parent.getFontRenderer().trimStringToWidth(entryName, this.listWidth - 10), this.left + 3, var3 + 2, 16777215);
             String ModName1 = "Vanilla/Unknown Mod";
             EntityRegistry.EntityRegistration er = EntityRegistry.instance().lookupModSpawn(((EntityConfigurationEntry)this.visibleEntities.get(listIndex)).Clazz, true);
             if (er != null) {
                 ModName1 = er.getContainer().getName();
             }
 
-            this.parent.getFontRenderer().func_78276_b(this.parent.getFontRenderer().func_78269_a(ModName1, this.listWidth - 10), this.left + 3, var3 + 12, 10066431);
+            this.parent.getFontRenderer().drawString(this.parent.getFontRenderer().trimStringToWidth(ModName1, this.listWidth - 10), this.left + 3, var3 + 12, 10066431);
         } catch (Throwable var10) {
         }
 

@@ -18,7 +18,7 @@ public class DIPotionEffects implements IMessage {
     }
 
     public DIPotionEffects(EntityLivingBase elb, List<PotionEffect> potionEffects) {
-        this.entityID = elb.func_145782_y();
+        this.entityID = elb.getEntityId();
         this.potionEffects = potionEffects;
     }
 
@@ -28,7 +28,7 @@ public class DIPotionEffects implements IMessage {
             int count = buf.readInt();
 
             for(int i = 0; i < count; ++i) {
-                this.potionEffects.add(new PotionEffect(Potion.func_188412_a(buf.readInt()), buf.readInt()));
+                this.potionEffects.add(new PotionEffect(Potion.getPotionById(buf.readInt()), buf.readInt()));
             }
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -42,8 +42,8 @@ public class DIPotionEffects implements IMessage {
             buf.writeInt(this.potionEffects.size());
 
             for(int i = 0; i < this.potionEffects.size(); ++i) {
-                buf.writeInt(Potion.func_188409_a(((PotionEffect)this.potionEffects.get(i)).func_188419_a()));
-                buf.writeInt(((PotionEffect)this.potionEffects.get(i)).func_76459_b());
+                buf.writeInt(Potion.getIdFromPotion(((PotionEffect)this.potionEffects.get(i)).getPotion()));
+                buf.writeInt(((PotionEffect)this.potionEffects.get(i)).getDuration());
             }
         } catch (Throwable ex) {
             ex.printStackTrace();

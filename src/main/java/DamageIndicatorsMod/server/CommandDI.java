@@ -11,25 +11,25 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class CommandDI extends CommandBase {
-    public String func_71517_b() {
+    public String getName() {
         return "direload";
     }
 
-    public String func_71518_a(ICommandSender icommandsender) {
+    public String getUsage(ICommandSender icommandsender) {
         return "commands.damageindicatorsmod.direload";
     }
 
-    public void func_184881_a(MinecraftServer server, ICommandSender icommandsender, String[] astring) {
-        if (icommandsender.func_70005_c_().toLowerCase().equals("server")) {
+    public void execute(MinecraftServer server, ICommandSender icommandsender, String[] astring) {
+        if (icommandsender.getName().toLowerCase().equals("server")) {
             DIConfig.loadConfig((File)null);
 
-            for(EntityPlayer player : (List)server.func_184103_al()) {
+            for(EntityPlayer player : (List)server.getPlayerList()) {
                 if (player != null) {
                     ServerEventHandler.sendServerSettings(player);
                 }
             }
         } else if (FMLCommonHandler.instance().getSide().isClient()) {
-            ((EntityPlayer)icommandsender).func_145747_a(new TextComponentString("Configuration Reloading"));
+            ((EntityPlayer)icommandsender).sendMessage(new TextComponentString("Configuration Reloading"));
             DIConfig.loadConfig((File)null);
         }
 

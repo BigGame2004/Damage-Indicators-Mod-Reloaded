@@ -29,7 +29,7 @@ public class DIClientProxy extends DIProxy {
         MinecraftForge.EVENT_BUS.register(seh);
         Tools.getInstance().RegisterRenders();
         JarSkinRegistration.init();
-        Minecraft.func_71410_x().field_71452_i.func_178929_a(this.wordParticle, (particleID, worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, p_178902_15_) -> {
+        Minecraft.getMinecraft().effectRenderer.registerParticle(this.wordParticle, (particleID, worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, p_178902_15_) -> {
             DIWordParticles customParticle = new DIWordParticles(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
             if (p_178902_15_[0] == 1) {
                 customParticle.shouldOnTop = true;
@@ -41,21 +41,21 @@ public class DIClientProxy extends DIProxy {
 
     public void doCritical(Entity target) {
         int shouldbeseen = 0;
-        if (Minecraft.func_71410_x().field_71439_g.func_70685_l(target)) {
+        if (Minecraft.getMinecraft().player.canEntityBeSeen(target)) {
             shouldbeseen = 1;
-        } else if (Minecraft.func_71410_x().func_71356_B()) {
+        } else if (Minecraft.getMinecraft().isSingleplayer()) {
             shouldbeseen = DIConfig.mainInstance().alwaysRender ? 1 : 0;
         }
 
-        if (target != Minecraft.func_71410_x().field_71439_g || Minecraft.func_71410_x().field_71474_y.field_74320_O != 0) {
-            double var10003 = target.field_70163_u + (double)target.field_70131_O;
-            Minecraft.func_71410_x().field_71452_i.func_178927_a(this.wordParticle, target.field_70165_t, var10003, target.field_70161_v, 0.001, (double)(0.05F * DIConfig.mainInstance().BounceStrength), 0.001, new int[]{shouldbeseen});
+        if (target != Minecraft.getMinecraft().player || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0) {
+            double var10003 = target.posY + (double)target.height;
+            Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(this.wordParticle, target.posX, var10003, target.posZ, 0.001, (double)(0.05F * DIConfig.mainInstance().BounceStrength), 0.001, new int[]{shouldbeseen});
         }
 
     }
 
     public EntityPlayer getPlayer() {
-        return Minecraft.func_71410_x().field_71439_g;
+        return Minecraft.getMinecraft().player;
     }
 
     public void trysendmessage() {
